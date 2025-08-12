@@ -81,4 +81,116 @@
   </style>
 
   <!-- Importa il client di Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    // Configurazione Supabase
+    const SUPABASE_URL = "https://arytlfiqiwdyiykaklmb.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeXRsZmlxaXdkeWl5a2FrbG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMDEzMTksImV4cCI6MjA3MDU3NzMxOX0.kVWYz6a5hDNazon7LYGK1AF4tnLEp8h-EdFGH17GXL8";
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function caricaLezioni() {
+      const { data, error } = await supabaseClient
+        .from("lezioni")
+        .select("*")
+        .order("data_creazione", { ascending: true });
+
+      if (error) {
+        console.error("Errore nel caricamento:", error);
+        return;
+      }
+
+      console.log("Dati ricevuti da Supabase:", data);
+
+      const container = document.getElementById("lezioni-container");
+      container.innerHTML = "";
+
+      data.forEach(lezione => {
+        const lezioneDiv = document.createElement("div");
+        lezioneDiv.style.border = "1px solid #ccc";
+        lezioneDiv.style.margin = "10px";
+        lezioneDiv.style.padding = "10px";
+        lezioneDiv.style.background = "#f9f9f9";
+
+        // Gestione vocabolario
+        let vocabolarioHTML = "";
+        if (lezione.vocabolario) {
+          let vocabolarioArray = lezione.vocabolario;
+          if (typeof vocabolarioArray === "string") {
+            try {
+              vocabolarioArray = JSON.parse(vocabolarioArray);
+            } catch (e) {
+              vocabolarioArray = [];
+            }
+          }
+          if (Array.isArray(vocabolarioArray)) {
+            vocabolarioHTML = "<ul>" + vocabolarioArray.map(item =>
+              `<li>${item.parola} = ${item.traduzione}</li>`
+            ).join("") + "</ul>";
+          }
+        }
+
+        // Gestione esercizi
+        let eserciziHTML = "";
+        if (lezione.esercizi) {
+          let eserciziArray = lezione.esercizi;
+          if (typeof eserciziArray === "string") {
+            try {
+              eserciziArray = JSON.parse(eserciziArray);
+            } catch (e) {
+              eserciziArray = [];
+            }
+          }
+          if (Array.isArray(eserciziArray)) {
+            eserciziHTML = "<ol>" + eserciziArray.map(ex =>
+              `<li>${ex.domanda} <em>(${ex.risposta})</em></li>`
+            ).join("") + "</ol>";
+          }
+        }
+
+        lezioneDiv.innerHTML = `
+          <h3>${lezione.titolo} (${lezione.livello})</h3>
+          <p><strong>Dialogo:</strong> ${lezione.dialogo}</p>
+          <p><strong>Vocabolario:</strong> ${vocabolarioHTML}</p>
+          <p><strong>Grammatica:</strong> ${lezione.grammatica ?? "—"}</p>
+          <p><strong>Esercizi:</strong> ${eserciziHTML}</p>
+        `;
+
+        container.appendChild(lezioneDiv);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", caricaLezioni);
+  </script>
+</head>
+<body>
+
+  <!-- Barra tricolore -->
+  <div class="flag-bar">
+    <div class="white"></div>
+    <div class="blue"></div>
+    <div class="red"></div>
+  </div>
+
+  <header>🇷🇺 App di Lingua Russa</header>
+
+  <nav class="menu">
+    <button class="btn-primary">🏠 Home</button>
+    <button class="btn-primary">📚 Lezioni</button>
+    <button class="btn-primary">🗣️ Vocabolario</button>
+    <button class="btn-primary">📖 Grammatica</button>
+    <button class="btn-primary">📝 Esercizi</button>
+    <button class="btn-primary">📩 Contatti</button>
+  </nav>
+
+  <main>
+    <h2>Benvenuto!</h2>
+    <p>Seleziona una sezione dal menu per iniziare il tuo percorso di apprendimento.</p>
+    <div id="lezioni-container"></div>
+  </main>
+
+  <footer>© 2025 App Lingua Russa</footer>
+
+</body>
+</html>

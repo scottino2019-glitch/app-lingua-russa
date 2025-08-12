@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>App Lingua Russa - Menu</title>
+  <title>App Lingua Russa</title>
   <style>
     body {
       margin: 0;
@@ -11,264 +11,121 @@
       background-color: #fff;
       color: #333;
     }
-
-    /* Barra tricolore */
+    /* Barra bandiera */
     .flag-bar { display: flex; height: 10px; }
     .flag-bar div { flex: 1; }
-    .white { background-color: #FFFFFF; }
-    .blue  { background-color: #0033A0; }
-    .red   { background-color: #D52B1E; }
-
+    .white { background: #fff; }
+    .blue { background: #0033A0; }
+    .red { background: #D52B1E; }
     header {
-      background-color: #0033A0;
-      color: #FFFFFF;
+      background: #0033A0;
+      color: #fff;
       text-align: center;
       padding: 20px;
       font-size: 1.5rem;
       font-weight: bold;
     }
-
     .menu {
       display: flex;
       gap: 10px;
       justify-content: center;
-      margin: 20px 0;
+      margin: 15px 0;
       flex-wrap: wrap;
     }
-
     .btn-primary {
-      width: 160px;
-      height: 33px;
-      background-color: #D52B1E;
-      color: #FFFFFF;
+      padding: 8px 15px;
+      background: #D52B1E;
+      color: #fff;
       border: none;
       border-radius: 6px;
       font-size: 14px;
       font-weight: bold;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      transition: background-color 0.3s ease;
     }
-    .btn-primary:hover { background-color: #a81f15; }
-
+    .btn-primary:hover { background: #a81f15; }
     main {
-      max-width: 900px;
+      max-width: 800px;
       margin: auto;
       padding: 20px;
       text-align: center;
     }
-
-    /* schede lezioni */
-    .lesson-card {
-      border-radius: 8px;
-      border: 1px solid #e0e0e0;
-      margin: 12px;
-      padding: 14px;
-      text-align: left;
-      background: linear-gradient(180deg,#fff,#fafafa);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-    }
-    .lesson-title {
-      display:flex;
-      gap:10px;
-      align-items:center;
-      margin-bottom:8px;
-    }
-    .lesson-badge {
-      background:#0033A0;
-      color:#fff;
-      padding:4px 8px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:bold;
-    }
-    .section-label { font-weight:600; margin-top:8px; }
     footer {
-      background-color: #0033A0;
-      color: #FFFFFF;
+      background: #0033A0;
+      color: #fff;
       text-align: center;
       padding: 10px;
-      position: fixed;
-      width: 100%;
-      bottom: 0;
+      margin-top: 30px;
     }
-
-    /* responsive small */
-    @media (max-width:520px){
-      .btn-primary { width: 140px; font-size:13px; height:34px; }
-      main { padding:12px; }
+    .card {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px 0;
+      text-align: left;
+      background: #f9f9f9;
     }
   </style>
 
-  <!-- client Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <script>
-    // --- Sostituisci con i tuoi valori Supabase se necessario ---
     const SUPABASE_URL = "https://arytlfiqiwdyiykaklmb.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeXRsZmlxaXdkeWl5a2FrbG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMDEzMTksImV4cCI6MjA3MDU3NzMxOX0.kVWYz6a5hDNazon7LYGK1AF4tnLEp8h-EdFGH17GXL8";
-
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // pulisce virgolette iniziali/finali e \n residui
-    function cleanText(str) {
-      if (str === null || str === undefined) return "";
-      let s = String(str);
-      // rimuove virgolette esterne e caratteri di escape newline
-      s = s.replace(/(^["']+|["']+$)/g, "").replace(/\\n/g, " ").replace(/\r/g, "").trim();
-      return s;
-    }
+    async function caricaSezione(tabella, ordine = null) {
+      const container = document.getElementById("content");
+      container.innerHTML = "<p>Caricamento...</p>";
 
-    // prova a parsare il campo che può essere array o stringa JSON
-    function parseJsonField(field) {
-      if (!field) return [];
-      let value = field;
-      if (typeof value === "string") {
-        // se è una stringa che contiene JSON, proviamo a parse
-        try {
-          value = JSON.parse(value);
-        } catch (e) {
-          // potrebbe essere un JSON "sporco" con apici singoli: tentativo risolutivo (non garantito)
-          try {
-            const fixed = value.replace(/'/g, '"');
-            value = JSON.parse(fixed);
-          } catch (e2) {
-            // fallback: non è JSON valido
-            return [];
-          }
-        }
+      let query = supabaseClient.from(tabella).select("*");
+      if (ordine) query = query.order(ordine, { ascending: true });
+
+      const { data, error } = await query;
+      if (error) {
+        container.innerHTML = `<p style='color:red'>Errore: ${error.message}</p>`;
+        return;
       }
-      return Array.isArray(value) ? value : [];
+
+      container.innerHTML = "";
+      data.forEach(item => {
+        const div = document.createElement("div");
+        div.classList.add("card");
+        div.innerHTML = `<h3>${item.titolo || item.nome || "Elemento"}</h3>
+                         <p>${item.contenuto || item.testo || ""}</p>`;
+        container.appendChild(div);
+      });
     }
 
-    async function caricaLezioni() {
-      const container = document.getElementById("lezioni-container");
-      container.innerHTML = "<p>Caricamento lezioni…</p>";
-
-      try {
-        const { data, error } = await supabaseClient
-          .from("lezioni")
-          .select("*")
-          .order("data_creazione", { ascending: true });
-
-        if (error) {
-          console.error("Errore nel caricamento:", error);
-          container.innerHTML = "<p style='color:crimson'>Errore nel caricamento delle lezioni. Controlla console.</p>";
-          return;
-        }
-
-        console.log("Dati ricevuti da Supabase:", data);
-
-        container.innerHTML = "";
-        if (!data || data.length === 0) {
-          container.innerHTML = "<p>Nessuna lezione trovata. Inserisci una riga in Supabase (table: lezioni).</p>";
-          return;
-        }
-
-        data.forEach(lezione => {
-          // pulizia testo
-          const titolo = cleanText(lezione.titolo);
-          const dialogo = cleanText(lezione.dialogo);
-
-          // parse vocabolario/esercizi (gestisce sia array JSON che stringa JSON)
-          const vocArray = parseJsonField(lezione.vocabolario);
-          const eserciziArray = parseJsonField(lezione.esercizi);
-
-          // crea HTML per vocabolario
-          let vocHtml = "<em>—</em>";
-          if (vocArray.length) {
-            vocHtml = "<ul>";
-            vocArray.forEach(item => {
-              const parola = cleanText(item.parola ?? item.word ?? "");
-              const trad = cleanText(item.traduzione ?? item.translation ?? item.translation_italian ?? "");
-              vocHtml += `<li><strong>${parola}</strong> — ${trad}</li>`;
-            });
-            vocHtml += "</ul>";
-          }
-
-          // crea HTML per esercizi
-          let esHtml = "<em>—</em>";
-          if (eserciziArray.length) {
-            esHtml = "<ol>";
-            eserciziArray.forEach(ex => {
-              const q = cleanText(ex.domanda ?? ex.question ?? "");
-              const a = cleanText(ex.risposta ?? ex.answer ?? "");
-              esHtml += `<li>${q} <small style="color:#666">(${a})</small></li>`;
-            });
-            esHtml += "</ol>";
-          }
-
-          // scheda lezione
-          const card = document.createElement("div");
-          card.className = "lesson-card";
-          card.innerHTML = `
-            <div class="lesson-title">
-              <span class="lesson-badge">${cleanText(lezione.livello ?? "—")}</span>
-              <h3 style="margin:0;">${titolo}</h3>
-            </div>
-            <div><span class="section-label">Dialogo:</span><div>${dialogo || "—"}</div></div>
-            <div><span class="section-label">Vocabolario:</span>${vocHtml}</div>
-            <div><span class="section-label">Grammatica:</span><div>${cleanText(lezione.grammatica) || "<em>—</em>"}</div></div>
-            <div><span class="section-label">Esercizi:</span>${esHtml}</div>
-          `;
-          container.appendChild(card);
-        });
-
-      } catch (err) {
-        console.error("Errore generale:", err);
-        container.innerHTML = "<p style='color:crimson'>Errore imprevisto. Vedi console per dettagli.</p>";
-      }
+    function mostraHome() {
+      document.getElementById("content").innerHTML = `
+        <h2>Benvenuto! 🇷🇺</h2>
+        <p>Questa è la tua app per imparare il russo.</p>
+        <p>Usa il menu qui sopra per navigare tra lezioni, vocabolario, grammatica ed esercizi.</p>
+      `;
     }
 
-    // rimuove eventuali service worker registrati (aiuta con messaggi "resource not cached")
-    function unregisterServiceWorkers() {
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(regs => {
-          regs.forEach(r => {
-            r.unregister().then(() => console.log('Service worker unregistered:', r.scope)).catch(()=>{});
-          });
-        }).catch(()=>{});
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      unregisterServiceWorkers();
-      caricaLezioni();
-    });
+    document.addEventListener("DOMContentLoaded", mostraHome);
   </script>
 </head>
 <body>
 
-  <!-- Barra tricolore -->
   <div class="flag-bar">
     <div class="white"></div>
     <div class="blue"></div>
     <div class="red"></div>
   </div>
 
-  <header>🇷🇺 App di Lingua Russa</header>
+  <header>App di Lingua Russa</header>
 
   <nav class="menu">
-    <button class="btn-primary">🏠 Home</button>
-    <button class="btn-primary">📚 Lezioni</button>
-    <button class="btn-primary">🗣️ Vocabolario</button>
-    <button class="btn-primary">📖 Grammatica</button>
-    <button class="btn-primary">📝 Esercizi</button>
-    <button class="btn-primary">📩 Contatti</button>
+    <button class="btn-primary" onclick="mostraHome()">🏠 Home</button>
+    <button class="btn-primary" onclick="caricaSezione('lezioni','numero')">📚 Lezioni</button>
+    <button class="btn-primary" onclick="caricaSezione('vocabolario')">🗣️ Vocabolario</button>
+    <button class="btn-primary" onclick="caricaSezione('grammatica')">📖 Grammatica</button>
+    <button class="btn-primary" onclick="caricaSezione('esercizi')">📝 Esercizi</button>
+    <button class="btn-primary" onclick="caricaSezione('contatti')">📩 Contatti</button>
   </nav>
 
-  <main>
-    <h2>Benvenuto!</h2>
-    <p>Seleziona una sezione dal menu per iniziare il tuo percorso di apprendimento.</p>
-
-    <!-- Contenitore dove Supabase mostrerà le lezioni -->
-    <div id="lezioni-container"></div>
-  </main>
+  <main id="content"></main>
 
   <footer>© 2025 App Lingua Russa</footer>
-
 </body>
 </html>

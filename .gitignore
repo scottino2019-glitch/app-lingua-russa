@@ -1,0 +1,3 @@
+git config --global user.name "scottino2019-glitch"
+git config --global user.email "la-tua-email-collegata-a-github"
+git commit -m "Prima versione app lingua russa"

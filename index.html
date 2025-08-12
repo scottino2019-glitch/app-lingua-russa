@@ -91,10 +91,10 @@
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     async function caricaLezioni() {
-      const { data, error } = await supabaseClient
-        .from("lezioni")
-        .select("*")
-        .order("data_creazione", { ascending: true });
+     const { data, error } = await supabaseClient
+  .from("lezioni")
+  .select("*");
+
 
       if (error) {
         console.error("Errore nel caricamento:", error);

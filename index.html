@@ -113,15 +113,29 @@
       lezioneDiv.style.padding = "10px";
       lezioneDiv.style.background = "#f9f9f9";
 
-      lezioneDiv.innerHTML = `
-        <h3>${lezione.titolo} (${lezione.livello})</h3>
-        <p><strong>Dialogo:</strong> ${lezione.dialogo}</p>
-        <p><strong>Vocabolario:</strong> ${JSON.stringify(lezione.vocabolario)}</p>
-        <p><strong>Grammatica:</strong> ${lezione.grammatica}</p>
-        <p><strong>Esercizi:</strong> ${JSON.stringify(lezione.esercizi)}</p>
-      `;
+    // Converte vocabolario in <ul>
+let vocabolarioHTML = "";
+if (lezione.vocabolario && Array.isArray(lezione.vocabolario)) {
+  vocabolarioHTML = "<ul>" + lezione.vocabolario.map(item =>
+    `<li>${item.parola} = ${item.traduzione}</li>`
+  ).join("") + "</ul>";
+}
 
-      container.appendChild(lezioneDiv);
+// Converte esercizi in <ol>
+let eserciziHTML = "";
+if (lezione.esercizi && Array.isArray(lezione.esercizi)) {
+  eserciziHTML = "<ol>" + lezione.esercizi.map(ex =>
+    `<li>${ex.domanda} <em>(${ex.risposta})</em></li>`
+  ).join("") + "</ol>";
+}
+
+lezioneDiv.innerHTML = `
+  <h3>${lezione.titolo} (${lezione.livello})</h3>
+  <p><strong>Dialogo:</strong> ${lezione.dialogo}</p>
+  <p><strong>Vocabolario:</strong> ${vocabolarioHTML}</p>
+  <p><strong>Grammatica:</strong> ${lezione.grammatica ?? "—"}</p>
+  <p><strong>Esercizi:</strong> ${eserciziHTML}</p>
+`;
     });
   }
 

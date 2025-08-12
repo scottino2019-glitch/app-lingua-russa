@@ -80,6 +80,56 @@
       bottom: 0;
     }
   </style>
+<!-- Importa il client di Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  // Configurazione Supabase
+  const SUPABASE_URL = "https://TUO-PROGETTO.supabase.co";
+  const SUPABASE_ANON_KEY = "TUA_CHIAVE_PUBBLICA";
+
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  async function caricaLezioni() {
+    // Prendi tutte le lezioni
+    const { data, error } = await supabaseClient
+      .from("lezioni")
+      .select("*")
+      .order("data_creazione", { ascending: true });
+
+    if (error) {
+      console.error("Errore nel caricamento:", error);
+      return;
+    }
+
+    // Mostra lezioni
+    const container = document.getElementById("lezioni-container");
+    container.innerHTML = "";
+
+    data.forEach(lezione => {
+      const lezioneDiv = document.createElement("div");
+      lezioneDiv.style.border = "1px solid #ccc";
+      lezioneDiv.style.margin = "10px";
+      lezioneDiv.style.padding = "10px";
+      lezioneDiv.style.background = "#f9f9f9";
+
+      lezioneDiv.innerHTML = `
+        <h3>${lezione.titolo} (${lezione.livello})</h3>
+        <p><strong>Dialogo:</strong> ${lezione.dialogo}</p>
+        <p><strong>Vocabolario:</strong> ${JSON.stringify(lezione.vocabolario)}</p>
+        <p><strong>Grammatica:</strong> ${lezione.grammatica}</p>
+        <p><strong>Esercizi:</strong> ${JSON.stringify(lezione.esercizi)}</p>
+      `;
+
+      container.appendChild(lezioneDiv);
+    });
+  }
+
+  // Carica lezioni quando la pagina è pronta
+  document.addEventListener("DOMContentLoaded", caricaLezioni);
+</script>
+
+  
 </head>
 <body>
 

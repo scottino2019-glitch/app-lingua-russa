@@ -71,28 +71,64 @@
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeXRsZmlxaXdkeWl5a2FrbG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMDEzMTksImV4cCI6MjA3MDU3NzMxOX0.kVWYz6a5hDNazon7LYGK1AF4tnLEp8h-EdFGH17GXL8";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    async function caricaSezione(tabella, ordine = null) {
-      const container = document.getElementById("content");
-      container.innerHTML = "<p>Caricamento...</p>";
+  <script>
+async function caricaSezione(tabella, ordine = null) {
+  const container = document.getElementById("content");
+  container.innerHTML = "<p>Caricamento...</p>";
 
-      let query = supabaseClient.from(tabella).select("*");
-      if (ordine) query = query.order(ordine, { ascending: true });
+  let query = supabaseClient.from(tabella).select("*");
+  if (ordine) query = query.order(ordine, { ascending: true });
 
-      const { data, error } = await query;
-      if (error) {
-        container.innerHTML = `<p style='color:red'>Errore: ${error.message}</p>`;
-        return;
-      }
+  const { data, error } = await query;
+  if (error) {
+    container.innerHTML = `<p style='color:red'>Errore: ${error.message}</p>`;
+    return;
+  }
 
-      container.innerHTML = "";
-      data.forEach(item => {
-        const div = document.createElement("div");
-        div.classList.add("card");
-        div.innerHTML = `<h3>${item.titolo || item.nome || "Elemento"}</h3>
-                         <p>${item.contenuto || item.testo || ""}</p>`;
-        container.appendChild(div);
-      });
+  if (!data || data.length === 0) {
+    container.innerHTML = "<p>Nessun contenuto trovato.</p>";
+    return;
+  }
+
+  container.innerHTML = "";
+  data.forEach(item => {
+    const div = document.createElement("div");
+    div.classList.add("card");
+
+    // Titolo
+    if (item.titolo) div.innerHTML += `<h3>${item.titolo}</h3>`;
+
+    // Dialogo
+    if (item.dialogo) {
+      div.innerHTML += `<h4>Dialogo</h4><pre>${item.dialogo}</pre>`;
     }
+
+    // Traduzione
+    if (item.traduzione) {
+      div.innerHTML += `<h4>Traduzione</h4><pre>${item.traduzione}</pre>`;
+    }
+
+    // Vocabolario (se è un array JSON)
+    if (item.vocabolario) {
+      let voca = Array.isArray(item.vocabolario)
+        ? item.vocabolario
+        : JSON.parse(item.vocabolario);
+      div.innerHTML += `<h4>Vocabolario</h4><ul>${voca.map(v => `<li>${v.parola} = ${v.traduzione}</li>`).join("")}</ul>`;
+    }
+
+    // Esercizi
+    if (item.esercizi) {
+      let ex = Array.isArray(item.esercizi)
+        ? item.esercizi
+        : JSON.parse(item.esercizi);
+      div.innerHTML += `<h4>Esercizi</h4><ul>${ex.map(e => `<li>${e.domanda} → ${e.risposta}</li>`).join("")}</ul>`;
+    }
+
+    container.appendChild(div);
+  });
+}
+</script>
+
 
     function mostraHome() {
       document.getElementById("content").innerHTML = `

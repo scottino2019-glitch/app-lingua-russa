@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App Lingua Russa - Menu</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Verdana, Arial, Helvetica, sans-serif;
+      background-color: #fff;
+      color: #333;
+    }
+
+    /* Barra tricolore */
+    .flag-bar {
+      display: flex;
+      height: 10px;
+    }
+    .flag-bar div {
+      flex: 1;
+    }
+    .white { background-color: #FFFFFF; }
+    .blue { background-color: #0033A0; }
+    .red { background-color: #D52B1E; }
+
+    header {
+      background-color: #0033A0; /* Blu bandiera russa */
+      color: #FFFFFF; /* Bianco */
+      text-align: center;
+      padding: 20px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .menu {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      width: 160px;
+      height: 33px;
+      background-color: #D52B1E; /* Rosso bandiera russa */
+      color: #FFFFFF; /* Testo bianco */
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #a81f15; /* Rosso più scuro */
+    }
+
+    main {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    footer {
+      background-color: #0033A0;
+      color: #FFFFFF;
+      text-align: center;
+      padding: 10px;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra tricolore -->
+  <div class="flag-bar">
+    <div class="white"></div>
+    <div class="blue"></div>
+    <div class="red"></div>
+  </div>
+
+  <header>🇷🇺 App di Lingua Russa</header>
+
+  <nav class="menu">
+    <button class="btn-primary">🏠 Home</button>
+    <button class="btn-primary">📚 Lezioni</button>
+    <button class="btn-primary">🗣️ Vocabolario</button>
+    <button class="btn-primary">📖 Grammatica</button>
+    <button class="btn-primary">📝 Esercizi</button>
+    <button class="btn-primary">📩 Contatti</button>
+  </nav>
+
+  <main>
+    <h2>Benvenuto!</h2>
+    <p>Seleziona una sezione dal menu per iniziare il tuo percorso di apprendimento.</p>
+  </main>
+
+  <footer>© 2025 App Lingua Russa</footer>
+
+</body>
+</html>
+

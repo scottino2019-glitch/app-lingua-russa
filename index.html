@@ -3,76 +3,93 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lezione</title>
+  <title>Lezione di Russo</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 font-sans leading-relaxed">
-  <div id="lezione" class="max-w-3xl mx-auto space-y-8 p-4"></div>
+<body class="bg-gray-100 min-h-screen flex justify-center p-6">
+  <div class="max-w-4xl w-full bg-white shadow-lg rounded-2xl p-8 space-y-8">
+    <header>
+      <h1 id="titolo" class="text-3xl font-bold text-center"></h1>
+      <p id="sottotitolo" class="text-lg text-center text-gray-600 mt-2"></p>
+    </header>
 
+    <section>
+      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Dialogo</h2>
+      <div id="dialogo" class="space-y-2"></div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Vocabolario</h2>
+      <div id="vocabolario" class="grid grid-cols-2 gap-4"></div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Grammatica</h2>
+      <p id="grammatica" class="text-gray-800"></p>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Esercizi</h2>
+      <div id="esercizi" class="space-y-2"></div>
+    </section>
+  </div>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = "https://arytlfiqiwdyiykaklmb.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeXRsZmlxaXdkeWl5a2FrbG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMDEzMTksImV4cCI6MjA3MDU3NzMxOX0.kVWYz6a5hDNazon7LYGK1AF4tnLEp8h-EdFGH17GXL8"; // sostituisci con la tua chiave anon
+    const SUPABASE_ANON_KEY = "INSERISCI-LA-TUA-KEY-ANON";
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    function safeParse(data) {
+      if (Array.isArray(data)) return data;
+      try { return JSON.parse(data); }
+      catch { return []; }
+    }
 
     async function caricaLezione() {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/lezioni?select=*`, {
-        headers: { 
-          apikey: SUPABASE_ANON_KEY, 
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`
-        }
+      const { data, error } = await supabase
+        .from("lezioni")
+        .select("*")
+        .eq("id", 1)
+        .single();
+
+      if (error) {
+        console.error("Errore caricamento:", error);
+        return;
+      }
+
+      document.getElementById("titolo").textContent = data.titolo || "";
+      document.getElementById("sottotitolo").textContent = data.sottotitolo || "";
+
+      const dialogo = safeParse(data.dialogo);
+      const vocabolario = safeParse(data.vocabolario);
+      const esercizi = safeParse(data.esercizi);
+
+      const dialogoDiv = document.getElementById("dialogo");
+      dialogo.forEach(([nome, frase]) => {
+        const p = document.createElement("p");
+        p.innerHTML = `<strong>${nome}:</strong> ${frase}`;
+        dialogoDiv.appendChild(p);
       });
-      const lezioni = await res.json();
-      if (!lezioni.length) return;
 
-      const lezione = lezioni[0];
-      const { titolo, sottotitolo, dialogo, vocabolario, grammatica, esercizi } = lezione;
+      const vocabolarioDiv = document.getElementById("vocabolario");
+      vocabolario.forEach(([russo, italiano]) => {
+        const r = document.createElement("div");
+        r.textContent = russo;
+        const i = document.createElement("div");
+        i.textContent = italiano;
+        vocabolarioDiv.appendChild(r);
+        vocabolarioDiv.appendChild(i);
+      });
 
-      const container = document.getElementById("lezione");
-      container.innerHTML = `
-        <!-- Titolo e sottotitolo -->
-        <div class="text-center">
-          <h1 class="text-3xl font-bold">${titolo}</h1>
-          <p class="text-gray-600 mt-2">${sottotitolo || ""}</p>
-        </div>
+      document.getElementById("grammatica").textContent = data.grammatica || "";
 
-        <!-- Dialogo -->
-        <div class="bg-white rounded-xl shadow p-4">
-          <h2 class="text-2xl font-semibold mb-4">Dialogo</h2>
-          <div class="grid grid-cols-2 gap-4">
-            ${dialogo.map(r => `
-              <div class="text-right font-semibold">${r[0]}</div>
-              <div class="text-left text-blue-600">${r[1]}</div>
-            `).join('')}
-          </div>
-        </div>
-
-        <!-- Vocabolario -->
-        <div class="bg-white rounded-xl shadow p-4">
-          <h2 class="text-2xl font-semibold mb-4">Vocabolario</h2>
-          <div class="grid grid-cols-2 gap-2">
-            ${vocabolario.map(v => `
-              <div>${v[0]}</div><div>${v[1]}</div>
-            `).join('')}
-          </div>
-        </div>
-
-        <!-- Grammatica -->
-        <div class="bg-yellow-50 rounded-xl shadow p-4">
-          <h2 class="text-2xl font-semibold mb-4">Grammatica</h2>
-          <p>${grammatica}</p>
-        </div>
-
-        <!-- Esercizi -->
-        <div class="bg-white rounded-xl shadow p-4">
-          <h2 class="text-2xl font-semibold mb-4">Esercizi</h2>
-          ${esercizi.map(e => `
-            <div class="mb-4">
-              <p>${e.domanda}</p>
-              <input class="border rounded p-2 mt-2 w-full" type="text" placeholder="Scrivi qui…">
-              <button class="mt-2 bg-blue-600 text-white rounded p-2">Verifica</button>
-            </div>
-          `).join('')}
-        </div>
-      `;
+      const eserciziDiv = document.getElementById("esercizi");
+      esercizi.forEach((ex, idx) => {
+        const p = document.createElement("p");
+        p.innerHTML = `${idx + 1}. ${ex.domanda}`;
+        eserciziDiv.appendChild(p);
+      });
     }
 
     caricaLezione();

@@ -1,153 +1,162 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lezione di Russo</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App Lingua Russa</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col">
-  <!-- NAVBAR -->
-  <nav class="bg-white shadow-md">
-    <div class="max-w-6xl mx-auto px-4">
-      <div class="flex justify-between">
-        <div class="flex space-x-4">
-          <!-- Logo -->
-          <a href="#" class="flex items-center py-5 text-gray-700">
-            <span class="font-bold text-xl">Lingua Russa</span>
-          </a>
-          <!-- Primary nav -->
-          <div class="hidden md:flex items-center space-x-2">
-            <a href="#" class="py-5 px-3 text-gray-700 hover:text-blue-600">Home</a>
-            <a href="#" class="py-5 px-3 text-gray-700 hover:text-blue-600">Lezioni</a>
-            <a href="#" class="py-5 px-3 text-gray-700 hover:text-blue-600">Grammatica</a>
-            <a href="#" class="py-5 px-3 text-gray-700 hover:text-blue-600">Esercizi</a>
-            <a href="#" class="py-5 px-3 text-gray-700 hover:text-blue-600">Vocabolario</a>
-            <a href="#" class="py-5 px-3 text-gray-700 hover:text-blue-600">Contatti</a>
-          </div>
-        </div>
-        <!-- Mobile button -->
-        <div class="md:hidden flex items-center">
-          <button id="mobile-btn" class="mobile-menu-button">
-            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M4 6h16M4 12h16M4 18h16"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-    <!-- Mobile menu -->
-    <div id="mobile-menu" class="hidden md:hidden">
-      <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-100">Home</a>
-      <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-100">Lezioni</a>
-      <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-100">Grammatica</a>
-      <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-100">Esercizi</a>
-      <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-100">Vocabolario</a>
-      <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-100">Contatti</a>
-    </div>
-  </nav>
+<body class="bg-gray-100 text-gray-900">
 
-  <!-- CONTENUTO PAGINA -->
-  <main class="flex-grow flex justify-center p-6">
-    <div class="max-w-4xl w-full bg-white shadow-lg rounded-2xl p-8 space-y-8">
-      <header>
-        <h1 id="titolo" class="text-3xl font-bold text-center">Caricamento…</h1>
-        <p id="sottotitolo" class="text-lg text-center text-gray-600 mt-2"></p>
-      </header>
+  <!-- HEADER -->
+  <header class="bg-gray-800 text-white p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Lingua Russa</h1>
+    <nav class="space-x-4">
+      <button class="hover:underline" data-target="home">Home</button>
+      <button class="hover:underline" data-target="lezioni">Lezioni</button>
+      <button class="hover:underline" data-target="grammatica">Grammatica</button>
+      <button class="hover:underline" data-target="esercizi">Esercizi</button>
+      <button class="hover:underline" data-target="vocabolario">Vocabolario</button>
+      <button class="hover:underline" data-target="contatti">Contatti</button>
+    </nav>
+  </header>
 
-      <section>
-        <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Dialogo</h2>
-        <div id="dialogo" class="space-y-2"></div>
-      </section>
+  <!-- CONTENUTO PRINCIPALE -->
+  <main class="p-6">
 
-      <section>
-        <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Vocabolario</h2>
-        <div id="vocabolario" class="grid grid-cols-2 gap-4"></div>
-      </section>
+    <!-- HOME -->
+    <section id="home">
+      <h2 class="text-2xl font-bold mb-4">Benvenuto nella tua App di Lingua Russa!</h2>
+      <p>Seleziona una sezione dal menu per iniziare a studiare.</p>
+    </section>
 
-      <section>
-        <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Grammatica</h2>
-        <p id="grammatica" class="text-gray-800"></p>
-      </section>
+    <!-- LEZIONI -->
+    <section id="lezioni" class="hidden">
+      <h2 class="text-2xl font-bold mb-4">Lezioni</h2>
+      <div id="lezioni-bottoni" class="flex flex-wrap gap-2 mb-6"></div>
+      <div id="lezione-container" class="space-y-6"></div>
+    </section>
 
-      <section>
-        <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Esercizi</h2>
-        <div id="esercizi" class="space-y-2"></div>
-      </section>
+    <!-- GRAMMATICA -->
+    <section id="grammatica" class="hidden">
+      <h2 class="text-2xl font-bold mb-4">Grammatica</h2>
+      <p>Qui aggiungeremo la grammatica dettagliata.</p>
+    </section>
 
-      <div id="errore" class="hidden p-4 rounded bg-red-50 text-red-700"></div>
-    </div>
+    <!-- ESERCIZI -->
+    <section id="esercizi" class="hidden">
+      <h2 class="text-2xl font-bold mb-4">Esercizi</h2>
+      <p>Qui aggiungeremo gli esercizi interattivi.</p>
+    </section>
+
+    <!-- VOCABOLARIO -->
+    <section id="vocabolario" class="hidden">
+      <h2 class="text-2xl font-bold mb-4">Vocabolario</h2>
+      <p>Qui aggiungeremo il vocabolario diviso per tema.</p>
+    </section>
+
+    <!-- CONTATTI -->
+    <section id="contatti" class="hidden">
+      <h2 class="text-2xl font-bold mb-4">Contatti</h2>
+      <div id="contatti-container" class="space-y-2"></div>
+    </section>
+
   </main>
 
-  <!-- Supabase + JS -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <!-- SCRIPT -->
   <script>
     const SUPABASE_URL = "https://arytlfiqiwdyiykaklmb.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeXRsZmlxaXdkeWl5a2FrbG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMDEzMTksImV4cCI6MjA3MDU3NzMxOX0.kVWYz6a5hDNazon7LYGK1AF4tnLEp8h-EdFGH17GXL8";
-    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    function safeParse(val) {
-      if (Array.isArray(val)) return val;
-      try { return JSON.parse(val); } catch { return []; }
-    }
-    function mostraErrore(msg) {
-      const box = document.getElementById("errore");
-      box.textContent = msg;
-      box.classList.remove("hidden");
-      console.error(msg);
-    }
+    // --- LEZIONI ---
+    async function caricaLezione() {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/lezioni?select=*`, {
+        headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` }
+      });
+      const lezioni = await res.json();
 
-    async function caricaLezione(id = 1) {
-      try {
-        const { data, error } = await sb
-          .from("lezioni")
-          .select("*")
-          .eq("id", id)
-          .single();
+      const bottoni = document.getElementById("lezioni-bottoni");
+      const container = document.getElementById("lezione-container");
+      bottoni.innerHTML = "";
+      container.innerHTML = "<p>Seleziona una lezione sopra.</p>";
 
-        if (error) {
-          mostraErrore("Errore Supabase: " + error.message);
-          document.getElementById("titolo").textContent = "Errore nel caricamento";
-          return;
-        }
-        if (!data) {
-          mostraErrore("Nessun dato trovato per la lezione " + id);
-          document.getElementById("titolo").textContent = "Nessuna lezione";
-          return;
-        }
-
-        document.getElementById("titolo").textContent = data.titolo || "";
-        document.getElementById("sottotitolo").textContent = data.sottotitolo || "";
-
-        const dialogo = safeParse(data.dialogo);
-        document.getElementById("dialogo").innerHTML = dialogo.map(([spk, frase]) =>
-          `<p><strong>${spk}:</strong> ${frase}</p>`
-        ).join("");
-
-        const vocabolario = safeParse(data.vocabolario);
-        document.getElementById("vocabolario").innerHTML = vocabolario.map(([ru, it]) =>
-          `<div class="p-2 border rounded">${ru}</div>
-           <div class="p-2 border rounded bg-gray-50">${it}</div>`
-        ).join("");
-
-        document.getElementById("grammatica").textContent = data.grammatica || "";
-
-        const esercizi = safeParse(data.esercizi);
-        document.getElementById("esercizi").innerHTML = esercizi.map((ex,i) =>
-          `<p>${i+1}. ${ex.domanda || ex.q || ""}</p>`
-        ).join("");
-
-      } catch (e) {
-        mostraErrore("Eccezione JS: " + e.message);
+      if (!lezioni.length) {
+        container.innerHTML = "<p>Nessuna lezione trovata.</p>";
+        return;
       }
-    }
-    caricaLezione();
 
-    // Mobile menu toggle
-    const btn = document.getElementById("mobile-btn");
-    const menu = document.getElementById("mobile-menu");
-    btn.addEventListener("click", () => menu.classList.toggle("hidden"));
+      lezioni.forEach((l, idx) => {
+        const btn = document.createElement("button");
+        btn.textContent = l.titolo ? `${idx + 1}. ${l.titolo}` : `Lezione ${idx + 1}`;
+        btn.className = "bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700";
+        btn.addEventListener("click", () => mostraLezione(l));
+        bottoni.appendChild(btn);
+      });
+    }
+
+    function mostraLezione(l) {
+      const c = document.getElementById("lezione-container");
+      c.innerHTML = `
+        <div class="bg-white p-4 rounded shadow">
+          <h3 class="text-xl font-bold mb-2">${l.titolo}</h3>
+          <p class="italic mb-4">${l.sottotitolo || ""}</p>
+
+          <div>
+            <h4 class="text-lg font-semibold mb-2">Dialogo</h4>
+            <div class="space-y-1">
+              ${Array.isArray(l.dialogo) ? l.dialogo.map(d => `<p><strong>${d[0]}</strong> — ${d[1]}</p>`).join("") : ""}
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <h4 class="text-lg font-semibold mb-2">Vocabolario</h4>
+            <div class="grid grid-cols-2 gap-1">
+              ${Array.isArray(l.vocabolario) ? l.vocabolario.map(v => `<div>${v[0]}</div><div>${v[1]}</div>`).join("") : ""}
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <h4 class="text-lg font-semibold mb-2">Grammatica</h4>
+            <p>${l.grammatica || ""}</p>
+          </div>
+
+          <div class="mt-4">
+            <h4 class="text-lg font-semibold mb-2">Esercizi</h4>
+            <ul class="list-disc list-inside">
+              ${Array.isArray(l.esercizi) ? l.esercizi.map(e => `<li>${e.domanda}</li>`).join("") : ""}
+            </ul>
+          </div>
+        </div>
+      `;
+    }
+
+    // --- CONTATTI ---
+    async function caricaContatti() {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/contatti?select=*`, {
+        headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` }
+      });
+      const contatti = await res.json();
+      const c = document.getElementById("contatti-container");
+      c.innerHTML = "";
+      if (!contatti.length) {
+        c.innerHTML = "<p>Nessun contatto trovato.</p>";
+        return;
+      }
+      contatti.forEach(ct => {
+        c.innerHTML += `<p><strong>${ct.nome}</strong> — ${ct.email}</p>`;
+      });
+    }
+
+    // --- GESTIONE MENU ---
+    document.querySelectorAll("header button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("main section").forEach(sec => sec.classList.add("hidden"));
+        const target = btn.dataset.target;
+        document.getElementById(target).classList.remove("hidden");
+        if (target === "lezioni") caricaLezione();
+        if (target === "contatti") caricaContatti();
+      });
+    });
   </script>
 </body>
 </html>

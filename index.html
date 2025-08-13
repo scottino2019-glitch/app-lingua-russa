@@ -1,173 +1,165 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>App Lingua Russa</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Verdana, Arial, Helvetica, sans-serif;
-      background-color: #fff;
-      color: #333;
-    }
-    /* Barra bandiera */
-    .flag-bar { display: flex; height: 10px; }
-    .flag-bar div { flex: 1; }
-    .white { background: #fff; }
-    .blue { background: #0033A0; }
-    .red { background: #D52B1E; }
-    header {
-      background: #0033A0;
-      color: #fff;
-      text-align: center;
-      padding: 20px;
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-    .menu {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      margin: 15px 0;
-      flex-wrap: wrap;
-    }
-    .btn-primary {
-      padding: 8px 15px;
-      background: #D52B1E;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .btn-primary:hover { background: #a81f15; }
-    main {
-      max-width: 800px;
-      margin: auto;
-      padding: 20px;
-      text-align: center;
-    }
-    footer {
-      background: #0033A0;
-      color: #fff;
-      text-align: center;
-      padding: 10px;
-      margin-top: 30px;
-    }
-    .card {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin: 10px 0;
-      text-align: left;
-      background: #f9f9f9;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>App Lingua Russa</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Verdana, Arial, Helvetica, sans-serif;
+      background-color: #fff;
+      color: #333;
+    }
+    /* Barra bandiera */
+    .flag-bar { display: flex; height: 10px; }
+    .flag-bar div { flex: 1; }
+    .white { background: #fff; }
+    .blue { background: #0033A0; }
+    .red { background: #D52B1E; }
+    header {
+      background: #0033A0;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .menu {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 15px 0;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      padding: 8px 15px;
+      background: #D52B1E;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn-primary:hover { background: #a81f15; }
+    main {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      text-align: center;
+    }
+    footer {
+      background: #0033A0;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+      margin-top: 30px;
+    }
+    .card {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px 0;
+      text-align: left;
+      background: #f9f9f9;
+    }
+  </style>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
- <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>App Lingua Russa</title>
-  <style>
-    /* ... il tuo CSS ... */
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const SUPABASE_URL = "https://arytlfiqiwdyiykaklmb.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeXRsZmlxaXdkeWl5a2FrbG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMDEzMTksImV4cCI6MjA3MDU3NzMxOX0.kVWYz6a5hDNazon7LYGK1AF4tnLEp8h-EdFGH17GXL8";
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://arytlfiqiwdyiykaklmb.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeXRsZmlxaXdkeWl5a2FrbG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMDEzMTksImV4cCI6MjA3MDU3NzMxOX0.kVWYz6a5hDNazon7LYGK1AF4tnLEp8h-EdFGH17GXL8";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    async function caricaSezione(tabella, ordine = null) {
-      const container = document.getElementById("content");
-      container.innerHTML = "<p>Caricamento...</p>";
+    async function caricaSezione(tabella, ordine = null) {
+      const container = document.getElementById("content");
+      container.innerHTML = "<p>Caricamento...</p>";
 
-      let query = supabaseClient.from(tabella).select("*");
-      if (ordine) query = query.order(ordine, { ascending: true });
+      let query = supabaseClient.from(tabella).select("*");
+      if (ordine) query = query.order(ordine, { ascending: true });
 
-      const { data, error } = await query;
-      if (error) {
-        container.innerHTML = `<p style='color:red'>Errore: ${error.message}</p>`;
-        return;
-      }
+      const { data, error } = await query;
+      if (error) {
+        container.innerHTML = `<p style='color:red'>Errore: ${error.message}</p>`;
+        return;
+      }
 
-      if (!data || data.length === 0) {
-        container.innerHTML = "<p>Nessun contenuto trovato.</p>";
-        return;
-      }
+      if (!data || data.length === 0) {
+        container.innerHTML = "<p>Nessun contenuto trovato.</p>";
+        return;
+      }
 
-      container.innerHTML = "";
-      data.forEach(item => {
-        const div = document.createElement("div");
-        div.classList.add("card");
+      container.innerHTML = "";
+      data.forEach(item => {
+        const div = document.createElement("div");
+        div.classList.add("card");
 
-        // Titolo
-        if (item.titolo) div.innerHTML += `<h3>${item.titolo}</h3>`;
+        // Titolo
+        if (item.titolo) div.innerHTML += `<h3>${item.titolo}</h3>`;
 
-        // Dialogo
-        if (item.dialogo) {
-          div.innerHTML += `<h4>Dialogo</h4><pre>${item.dialogo}</pre>`;
-        }
+        // Dialogo
+        if (item.dialogo) {
+          div.innerHTML += `<h4>Dialogo</h4><pre>${item.dialogo}</pre>`;
+        }
 
-        // Traduzione
-        if (item.traduzione) {
-          div.innerHTML += `<h4>Traduzione</h4><pre>${item.traduzione}</pre>`;
-        }
+        // Traduzione
+        if (item.traduzione) {
+          div.innerHTML += `<h4>Traduzione</h4><pre>${item.traduzione}</pre>`;
+        }
 
-        // Vocabolario (se è un array JSON)
-        if (item.vocabolario) {
-          let voca = Array.isArray(item.vocabolario)
-            ? item.vocabolario
-            : JSON.parse(item.vocabolario);
-          div.innerHTML += `<h4>Vocabolario</h4><ul>${voca.map(v => `<li>${v.parola} = ${v.traduzione}</li>`).join("")}</ul>`;
-        }
+        // Vocabolario (se è un array JSON)
+        if (item.vocabolario) {
+          let voca = Array.isArray(item.vocabolario)
+            ? item.vocabolario
+            : JSON.parse(item.vocabolario);
+          div.innerHTML += `<h4>Vocabolario</h4><ul>${voca.map(v => `<li>${v.parola} = ${v.traduzione}</li>`).join("")}</ul>`;
+        }
 
-        // Esercizi
-        if (item.esercizi) {
-          let ex = Array.isArray(item.esercizi)
-            ? item.esercizi
-            : JSON.parse(item.esercizi);
-          div.innerHTML += `<h4>Esercizi</h4><ul>${ex.map(e => `<li>${e.domanda} → ${e.risposta}</li>`).join("")}</ul>`;
-        }
+        // Esercizi
+        if (item.esercizi) {
+          let ex = Array.isArray(item.esercizi)
+            ? item.esercizi
+            : JSON.parse(item.esercizi);
+          div.innerHTML += `<h4>Esercizi</h4><ul>${ex.map(e => `<li>${e.domanda} → ${e.risposta}</li>`).join("")}</ul>`;
+        }
 
-        container.appendChild(div);
-      });
-    }
+        container.appendChild(div);
+      });
+    }
 
-    function mostraHome() {
-      document.getElementById("content").innerHTML = `
-        <h2>Benvenuto! 🇷🇺</h2>
-        <p>Questa è la tua app per imparare il russo.</p>
-        <p>Usa il menu qui sopra per navigare tra lezioni, vocabolario, grammatica ed esercizi.</p>
-      `;
-    }
+    function mostraHome() {
+      document.getElementById("content").innerHTML = `
+        <h2>Benvenuto! 🇷🇺</h2>
+        <p>Questa è la tua app per imparare il russo.</p>
+        <p>Usa il menu qui sopra per navigare tra lezioni, vocabolario, grammatica ed esercizi.</p>
+      `;
+    }
 
-    document.addEventListener("DOMContentLoaded", mostraHome);
-  </script>
-</head>
+    document.addEventListener("DOMContentLoaded", mostraHome);
+  </script>
 </head>
 <body>
 
-  <div class="flag-bar">
-    <div class="white"></div>
-    <div class="blue"></div>
-    <div class="red"></div>
-  </div>
+  <div class="flag-bar">
+    <div class="white"></div>
+    <div class="blue"></div>
+    <div class="red"></div>
+  </div>
 
-  <header>App di Lingua Russa</header>
+  <header>App di Lingua Russa</header>
 
-  <nav class="menu">
-    <button class="btn-primary" onclick="mostraHome()">🏠 Home</button>
-    <button class="btn-primary" onclick="caricaSezione('lezioni','numero')">📚 Lezioni</button>
-    <button class="btn-primary" onclick="caricaSezione('vocabolario')">🗣️ Vocabolario</button>
-    <button class="btn-primary" onclick="caricaSezione('grammatica')">📖 Grammatica</button>
-    <button class="btn-primary" onclick="caricaSezione('esercizi')">📝 Esercizi</button>
-    <button class="btn-primary" onclick="caricaSezione('contatti')">📩 Contatti</button>
-  </nav>
+  <nav class="menu">
+    <button class="btn-primary" onclick="mostraHome()">🏠 Home</button>
+    <!-- Correzione qui: ordina per 'titolo' invece che 'numero' -->
+    <button class="btn-primary" onclick="caricaSezione('lezioni','titolo')">📚 Lezioni</button>
+    <button class="btn-primary" onclick="caricaSezione('vocabolario')">🗣️ Vocabolario</button>
+    <button class="btn-primary" onclick="caricaSezione('grammatica')">📖 Grammatica</button>
+    <button class="btn-primary" onclick="caricaSezione('esercizi')">📝 Esercizi</button>
+    <button class="btn-primary" onclick="caricaSezione('contatti')">📩 Contatti</button>
+  </nav>
 
-  <main id="content"></main>
+  <main id="content"></main>
 
-  <footer>© 2025 App Lingua Russa</footer>
+  <footer>© 2025 App Lingua Russa</footer>
 </body>
 </html>

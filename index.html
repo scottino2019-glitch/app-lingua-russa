@@ -4,12 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lezione di Russo</title>
+  <!-- CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex justify-center p-6">
   <div class="max-w-4xl w-full bg-white shadow-lg rounded-2xl p-8 space-y-8">
     <header>
-      <h1 id="titolo" class="text-3xl font-bold text-center"></h1>
+      <h1 id="titolo" class="text-3xl font-bold text-center">Caricamento…</h1>
       <p id="sottotitolo" class="text-lg text-center text-gray-600 mt-2"></p>
     </header>
 
@@ -32,67 +33,88 @@
       <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Esercizi</h2>
       <div id="esercizi" class="space-y-2"></div>
     </section>
+
+    <div id="errore" class="hidden p-4 rounded bg-red-50 text-red-700"></div>
   </div>
 
+  <!-- Supabase JS v2 (UMD) -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
+    // === CONFIG ===
     const SUPABASE_URL = "https://arytlfiqiwdyiykaklmb.supabase.co";
-    const SUPABASE_ANON_KEY = "INSERISCI-LA-TUA-KEY-ANON";
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeXRsZmlxaXdkeWl5a2FrbG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMDEzMTksImV4cCI6MjA3MDU3NzMxOX0.kVWYz6a5hDNazon7LYGK1AF4tnLEp8h-EdFGH17GXL8";
 
-    function safeParse(data) {
-      if (Array.isArray(data)) return data;
-      try { return JSON.parse(data); }
-      catch { return []; }
+    // IMPORTANTISSIMO: usa window.supabase e rinomina il client (sb)
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Utility: parse sicuro (nel caso i JSON fossero salvati come testo)
+    function safeParse(val) {
+      if (Array.isArray(val)) return val;
+      try { return JSON.parse(val); } catch { return []; }
     }
 
-    async function caricaLezione() {
-      const { data, error } = await supabase
-        .from("lezioni")
-        .select("*")
-        .eq("id", 1)
-        .single();
+    function mostraErrore(msg) {
+      const box = document.getElementById("errore");
+      box.textContent = msg;
+      box.classList.remove("hidden");
+      console.error(msg);
+    }
 
-      if (error) {
-        console.error("Errore caricamento:", error);
-        return;
+    async function caricaLezione(id = 1) {
+      try {
+        const { data, error } = await sb
+          .from("lezioni")
+          .select("*")
+          .eq("id", id)
+          .single();
+
+        if (error) {
+          mostraErrore("Errore Supabase: " + error.message);
+          document.getElementById("titolo").textContent = "Errore nel caricamento";
+          return;
+        }
+        if (!data) {
+          mostraErrore("Nessun dato trovato per la lezione " + id);
+          document.getElementById("titolo").textContent = "Nessuna lezione";
+          return;
+        }
+
+        // Dati
+        const titolo = data.titolo || "";
+        const sottotitolo = data.sottotitolo || "";
+        const dialogo = safeParse(data.dialogo);
+        const vocabolario = safeParse(data.vocabolario);
+        const esercizi = safeParse(data.esercizi);
+        const grammatica = data.grammatica || "";
+
+        // Render
+        document.getElementById("titolo").textContent = titolo;
+        document.getElementById("sottotitolo").textContent = sottotitolo;
+
+        const dialogoDiv = document.getElementById("dialogo");
+        dialogoDiv.innerHTML = dialogo.map(([speaker, frase]) =>
+          `<p><strong>${speaker}:</strong> ${frase}</p>`
+        ).join("");
+
+        const vocaDiv = document.getElementById("vocabolario");
+        vocaDiv.innerHTML = vocabolario.map(([ru, it]) =>
+          `<div class="p-2 border rounded">${ru}</div>
+           <div class="p-2 border rounded bg-gray-50">${it}</div>`
+        ).join("");
+
+        document.getElementById("grammatica").textContent = grammatica;
+
+        const exDiv = document.getElementById("esercizi");
+        exDiv.innerHTML = esercizi.map((ex, i) =>
+          `<p>${i + 1}. ${ex.domanda || ex.q || ""}</p>`
+        ).join("");
+
+      } catch (e) {
+        mostraErrore("Eccezione JS: " + e.message);
       }
-
-      document.getElementById("titolo").textContent = data.titolo || "";
-      document.getElementById("sottotitolo").textContent = data.sottotitolo || "";
-
-      const dialogo = safeParse(data.dialogo);
-      const vocabolario = safeParse(data.vocabolario);
-      const esercizi = safeParse(data.esercizi);
-
-      const dialogoDiv = document.getElementById("dialogo");
-      dialogo.forEach(([nome, frase]) => {
-        const p = document.createElement("p");
-        p.innerHTML = `<strong>${nome}:</strong> ${frase}`;
-        dialogoDiv.appendChild(p);
-      });
-
-      const vocabolarioDiv = document.getElementById("vocabolario");
-      vocabolario.forEach(([russo, italiano]) => {
-        const r = document.createElement("div");
-        r.textContent = russo;
-        const i = document.createElement("div");
-        i.textContent = italiano;
-        vocabolarioDiv.appendChild(r);
-        vocabolarioDiv.appendChild(i);
-      });
-
-      document.getElementById("grammatica").textContent = data.grammatica || "";
-
-      const eserciziDiv = document.getElementById("esercizi");
-      esercizi.forEach((ex, idx) => {
-        const p = document.createElement("p");
-        p.innerHTML = `${idx + 1}. ${ex.domanda}`;
-        eserciziDiv.appendChild(p);
-      });
     }
 
-    caricaLezione();
+    caricaLezione(); // carica Lezione 1
   </script>
 </body>
 </html>

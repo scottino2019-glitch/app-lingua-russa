@@ -7,11 +7,13 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { font-family: sans-serif; }
-    .lezione-btn { @apply bg-blue-600 text-white px-3 py-1 rounded m-1 hover:bg-blue-700; }
+    .lezione-btn { @apply bg-blue-600 text-white px-4 py-2 rounded-full m-1 shadow hover:bg-blue-700 transition; }
     .section-title { @apply text-xl font-bold mt-6 mb-2 border-b pb-1; }
     .dialogo-line { @apply flex justify-between border-b py-1; }
     .vocabolario-line { @apply flex justify-between border-b py-1; }
-    .esercizio-line { @apply border p-2 my-1 rounded bg-gray-100; }
+    .esercizio-line { @apply border p-3 my-2 rounded bg-gray-100 shadow; }
+    .check-btn { @apply bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition mt-2; }
+    .back-btn { @apply bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600 transition mb-4; }
   </style>
 </head>
 <body class="bg-gray-50">
@@ -35,7 +37,7 @@
 
     <!-- LEZIONE -->
     <div id="lezione" class="hidden">
-      <button onclick="showHome()" class="bg-gray-500 text-white px-3 py-1 rounded mb-4 hover:bg-gray-600">← Torna alla Home</button>
+      <button onclick="showHome()" class="back-btn">← Torna alla Home</button>
       <h2 id="titolo" class="text-2xl font-bold"></h2>
       <h3 id="sottotitolo" class="text-lg text-gray-700 mb-4"></h3>
 
@@ -56,7 +58,7 @@
 
     <!-- CONTATTI -->
     <div id="contatti" class="hidden">
-      <button onclick="showHome()" class="bg-gray-500 text-white px-3 py-1 rounded mb-4 hover:bg-gray-600">← Torna alla Home</button>
+      <button onclick="showHome()" class="back-btn">← Torna alla Home</button>
       <h2 class="text-2xl font-bold mb-4">Contatti</h2>
       <div id="contatti-dati" class="bg-white p-4 rounded shadow"></div>
     </div>
@@ -65,11 +67,10 @@
   <!-- SCRIPT SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const SUPABASE_URL = "https://arytlfiqiwdyiykaklmb.supabase.co";  // <-- la tua URL
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeXRsZmlxaXdkeWl5a2FrbG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMDEzMTksImV4cCI6MjA3MDU3NzMxOX0.kVWYz6a5hDNazon7LYGK1AF4tnLEp8h-EdFGH17GXL8";                     // <-- la tua chiave
+    const SUPABASE_URL = "https://arytlfiqiwdyiykaklmb.supabase.co";
+    const SUPABASE_KEY = "INSERISCI_CHIAVE_ANON";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Cambia visibilità sezioni
     function showHome() {
       document.getElementById('home').classList.remove('hidden');
       document.getElementById('lezione').classList.add('hidden');
@@ -87,16 +88,12 @@
       caricaContatti();
     }
 
-    // Carica lezioni e crea pulsanti
     async function caricaLezioni() {
       const { data, error } = await supabaseClient
         .from('lezioni')
         .select('*')
         .order('ordine', { ascending: true });
-      if (error) {
-        console.error(error);
-        return;
-      }
+      if (error) { console.error(error); return; }
       const container = document.getElementById('lezioni-buttons');
       container.innerHTML = '';
       data.forEach(lezione => {
@@ -108,12 +105,10 @@
       });
     }
 
-    // Mostra contenuto lezione
     function mostraLezione(lezione) {
       document.getElementById('titolo').textContent = lezione.titolo;
       document.getElementById('sottotitolo').textContent = lezione.sottotitolo || '';
 
-      // Dialogo
       const dialogoDiv = document.getElementById('dialogo');
       dialogoDiv.innerHTML = '';
       (lezione.dialogo || []).forEach(riga => {
@@ -123,7 +118,6 @@
         dialogoDiv.appendChild(div);
       });
 
-      // Vocabolario
       const vocabDiv = document.getElementById('vocabolario');
       vocabDiv.innerHTML = '';
       (lezione.vocabolario || []).forEach(riga => {
@@ -133,23 +127,37 @@
         vocabDiv.appendChild(div);
       });
 
-      // Grammatica
       document.getElementById('grammatica').textContent = lezione.grammatica || '';
 
-      // Esercizi
       const eserciziDiv = document.getElementById('esercizi');
       eserciziDiv.innerHTML = '';
-      (lezione.esercizi || []).forEach(q => {
+      (lezione.esercizi || []).forEach((q, i) => {
         const div = document.createElement('div');
         div.className = 'esercizio-line';
-        div.innerHTML = `<strong>${q.domanda}</strong><br>Risposta: ${q.risposta}`;
+        div.innerHTML = `
+          <strong>${q.domanda}</strong><br>
+          <input type="text" id="risposta-${i}" class="border rounded px-2 py-1 mt-1 w-full" placeholder="Scrivi la risposta">
+          <button class="check-btn" onclick="controllaRisposta(${i}, '${q.risposta}')">Verifica</button>
+          <div id="feedback-${i}" class="mt-2 text-sm"></div>
+        `;
         eserciziDiv.appendChild(div);
       });
 
       showLezione();
     }
 
-    // Carica contatti
+    function controllaRisposta(idx, corretta) {
+      const userInput = document.getElementById(`risposta-${idx}`).value.trim();
+      const feedback = document.getElementById(`feedback-${idx}`);
+      if (userInput.toLowerCase() === corretta.toLowerCase()) {
+        feedback.textContent = "Corretto! 🎉";
+        feedback.className = "mt-2 text-green-600 font-bold";
+      } else {
+        feedback.textContent = `Risposta errata. Quella giusta era: ${corretta}`;
+        feedback.className = "mt-2 text-red-600 font-bold";
+      }
+    }
+
     async function caricaContatti() {
       const { data, error } = await supabaseClient.from('contatti').select('*');
       if (error) { console.error(error); return; }
@@ -160,7 +168,6 @@
       });
     }
 
-    // Avvio
     caricaLezioni();
   </script>
 </body>

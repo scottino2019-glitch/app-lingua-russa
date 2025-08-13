@@ -5,158 +5,163 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>App Lingua Russa</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: sans-serif; }
+    .lezione-btn { @apply bg-blue-600 text-white px-3 py-1 rounded m-1 hover:bg-blue-700; }
+    .section-title { @apply text-xl font-bold mt-6 mb-2 border-b pb-1; }
+    .dialogo-line { @apply flex justify-between border-b py-1; }
+    .vocabolario-line { @apply flex justify-between border-b py-1; }
+    .esercizio-line { @apply border p-2 my-1 rounded bg-gray-100; }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-900">
-
+<body class="bg-gray-50">
   <!-- HEADER -->
-  <header class="bg-gray-800 text-white p-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold">Lingua Russa</h1>
-    <nav class="space-x-4">
-      <button class="hover:underline" data-target="home">Home</button>
-      <button class="hover:underline" data-target="lezioni">Lezioni</button>
-      <button class="hover:underline" data-target="grammatica">Grammatica</button>
-      <button class="hover:underline" data-target="esercizi">Esercizi</button>
-      <button class="hover:underline" data-target="vocabolario">Vocabolario</button>
-      <button class="hover:underline" data-target="contatti">Contatti</button>
+  <header class="bg-blue-600 text-white p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Corso di Russo</h1>
+    <nav>
+      <button onclick="showHome()" class="lezione-btn">Home</button>
+      <button onclick="showContatti()" class="lezione-btn">Contatti</button>
     </nav>
   </header>
 
-  <!-- CONTENUTO PRINCIPALE -->
-  <main class="p-6">
-
+  <!-- CONTENUTO -->
+  <main class="p-4 max-w-3xl mx-auto">
     <!-- HOME -->
-    <section id="home">
-      <h2 class="text-2xl font-bold mb-4">Benvenuto nella tua App di Lingua Russa!</h2>
-      <p>Seleziona una sezione dal menu per iniziare a studiare.</p>
-    </section>
+    <div id="home">
+      <h2 class="text-2xl font-bold mb-4">Benvenuto!</h2>
+      <p class="mb-4">Seleziona una lezione per iniziare:</p>
+      <div id="lezioni-buttons" class="flex flex-wrap"></div>
+    </div>
 
-    <!-- LEZIONI -->
-    <section id="lezioni" class="hidden">
-      <h2 class="text-2xl font-bold mb-4">Lezioni</h2>
-      <div id="lezioni-bottoni" class="flex flex-wrap gap-2 mb-6"></div>
-      <div id="lezione-container" class="space-y-6"></div>
-    </section>
+    <!-- LEZIONE -->
+    <div id="lezione" class="hidden">
+      <button onclick="showHome()" class="bg-gray-500 text-white px-3 py-1 rounded mb-4 hover:bg-gray-600">← Torna alla Home</button>
+      <h2 id="titolo" class="text-2xl font-bold"></h2>
+      <h3 id="sottotitolo" class="text-lg text-gray-700 mb-4"></h3>
 
-    <!-- GRAMMATICA -->
-    <section id="grammatica" class="hidden">
-      <h2 class="text-2xl font-bold mb-4">Grammatica</h2>
-      <p>Qui aggiungeremo la grammatica dettagliata.</p>
-    </section>
+      <div>
+        <div class="section-title">Dialogo</div>
+        <div id="dialogo"></div>
 
-    <!-- ESERCIZI -->
-    <section id="esercizi" class="hidden">
-      <h2 class="text-2xl font-bold mb-4">Esercizi</h2>
-      <p>Qui aggiungeremo gli esercizi interattivi.</p>
-    </section>
+        <div class="section-title">Vocabolario</div>
+        <div id="vocabolario"></div>
 
-    <!-- VOCABOLARIO -->
-    <section id="vocabolario" class="hidden">
-      <h2 class="text-2xl font-bold mb-4">Vocabolario</h2>
-      <p>Qui aggiungeremo il vocabolario diviso per tema.</p>
-    </section>
+        <div class="section-title">Grammatica</div>
+        <div id="grammatica" class="bg-white p-2 rounded shadow"></div>
+
+        <div class="section-title">Esercizi</div>
+        <div id="esercizi"></div>
+      </div>
+    </div>
 
     <!-- CONTATTI -->
-    <section id="contatti" class="hidden">
+    <div id="contatti" class="hidden">
+      <button onclick="showHome()" class="bg-gray-500 text-white px-3 py-1 rounded mb-4 hover:bg-gray-600">← Torna alla Home</button>
       <h2 class="text-2xl font-bold mb-4">Contatti</h2>
-      <div id="contatti-container" class="space-y-2"></div>
-    </section>
-
+      <div id="contatti-dati" class="bg-white p-4 rounded shadow"></div>
+    </div>
   </main>
 
-  <!-- SCRIPT -->
+  <!-- SCRIPT SUPABASE -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const SUPABASE_URL = "https://arytlfiqiwdyiykaklmb.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeXRsZmlxaXdkeWl5a2FrbG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMDEzMTksImV4cCI6MjA3MDU3NzMxOX0.kVWYz6a5hDNazon7LYGK1AF4tnLEp8h-EdFGH17GXL8";
+    const SUPABASE_URL = "https://arytlfiqiwdyiykaklmb.supabase.co";  // <-- la tua URL
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeXRsZmlxaXdkeWl5a2FrbG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMDEzMTksImV4cCI6MjA3MDU3NzMxOX0.kVWYz6a5hDNazon7LYGK1AF4tnLEp8h-EdFGH17GXL8";                     // <-- la tua chiave
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // --- LEZIONI ---
-    async function caricaLezione() {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/lezioni?select=*`, {
-        headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` }
-      });
-      const lezioni = await res.json();
+    // Cambia visibilità sezioni
+    function showHome() {
+      document.getElementById('home').classList.remove('hidden');
+      document.getElementById('lezione').classList.add('hidden');
+      document.getElementById('contatti').classList.add('hidden');
+    }
+    function showLezione() {
+      document.getElementById('home').classList.add('hidden');
+      document.getElementById('lezione').classList.remove('hidden');
+      document.getElementById('contatti').classList.add('hidden');
+    }
+    function showContatti() {
+      document.getElementById('home').classList.add('hidden');
+      document.getElementById('lezione').classList.add('hidden');
+      document.getElementById('contatti').classList.remove('hidden');
+      caricaContatti();
+    }
 
-      const bottoni = document.getElementById("lezioni-bottoni");
-      const container = document.getElementById("lezione-container");
-      bottoni.innerHTML = "";
-      container.innerHTML = "<p>Seleziona una lezione sopra.</p>";
-
-      if (!lezioni.length) {
-        container.innerHTML = "<p>Nessuna lezione trovata.</p>";
+    // Carica lezioni e crea pulsanti
+    async function caricaLezioni() {
+      const { data, error } = await supabaseClient
+        .from('lezioni')
+        .select('*')
+        .order('ordine', { ascending: true });
+      if (error) {
+        console.error(error);
         return;
       }
-
-      lezioni.forEach((l, idx) => {
-        const btn = document.createElement("button");
-        btn.textContent = l.titolo ? `${idx + 1}. ${l.titolo}` : `Lezione ${idx + 1}`;
-        btn.className = "bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700";
-        btn.addEventListener("click", () => mostraLezione(l));
-        bottoni.appendChild(btn);
+      const container = document.getElementById('lezioni-buttons');
+      container.innerHTML = '';
+      data.forEach(lezione => {
+        const btn = document.createElement('button');
+        btn.className = 'lezione-btn';
+        btn.textContent = lezione.titolo;
+        btn.onclick = () => mostraLezione(lezione);
+        container.appendChild(btn);
       });
     }
 
-    function mostraLezione(l) {
-      const c = document.getElementById("lezione-container");
-      c.innerHTML = `
-        <div class="bg-white p-4 rounded shadow">
-          <h3 class="text-xl font-bold mb-2">${l.titolo}</h3>
-          <p class="italic mb-4">${l.sottotitolo || ""}</p>
+    // Mostra contenuto lezione
+    function mostraLezione(lezione) {
+      document.getElementById('titolo').textContent = lezione.titolo;
+      document.getElementById('sottotitolo').textContent = lezione.sottotitolo || '';
 
-          <div>
-            <h4 class="text-lg font-semibold mb-2">Dialogo</h4>
-            <div class="space-y-1">
-              ${Array.isArray(l.dialogo) ? l.dialogo.map(d => `<p><strong>${d[0]}</strong> — ${d[1]}</p>`).join("") : ""}
-            </div>
-          </div>
+      // Dialogo
+      const dialogoDiv = document.getElementById('dialogo');
+      dialogoDiv.innerHTML = '';
+      (lezione.dialogo || []).forEach(riga => {
+        const div = document.createElement('div');
+        div.className = 'dialogo-line';
+        div.innerHTML = `<span>${riga.ru}</span><span>${riga.it}</span>`;
+        dialogoDiv.appendChild(div);
+      });
 
-          <div class="mt-4">
-            <h4 class="text-lg font-semibold mb-2">Vocabolario</h4>
-            <div class="grid grid-cols-2 gap-1">
-              ${Array.isArray(l.vocabolario) ? l.vocabolario.map(v => `<div>${v[0]}</div><div>${v[1]}</div>`).join("") : ""}
-            </div>
-          </div>
+      // Vocabolario
+      const vocabDiv = document.getElementById('vocabolario');
+      vocabDiv.innerHTML = '';
+      (lezione.vocabolario || []).forEach(riga => {
+        const div = document.createElement('div');
+        div.className = 'vocabolario-line';
+        div.innerHTML = `<span>${riga.ru}</span><span>${riga.it}</span>`;
+        vocabDiv.appendChild(div);
+      });
 
-          <div class="mt-4">
-            <h4 class="text-lg font-semibold mb-2">Grammatica</h4>
-            <p>${l.grammatica || ""}</p>
-          </div>
+      // Grammatica
+      document.getElementById('grammatica').textContent = lezione.grammatica || '';
 
-          <div class="mt-4">
-            <h4 class="text-lg font-semibold mb-2">Esercizi</h4>
-            <ul class="list-disc list-inside">
-              ${Array.isArray(l.esercizi) ? l.esercizi.map(e => `<li>${e.domanda}</li>`).join("") : ""}
-            </ul>
-          </div>
-        </div>
-      `;
+      // Esercizi
+      const eserciziDiv = document.getElementById('esercizi');
+      eserciziDiv.innerHTML = '';
+      (lezione.esercizi || []).forEach(q => {
+        const div = document.createElement('div');
+        div.className = 'esercizio-line';
+        div.innerHTML = `<strong>${q.domanda}</strong><br>Risposta: ${q.risposta}`;
+        eserciziDiv.appendChild(div);
+      });
+
+      showLezione();
     }
 
-    // --- CONTATTI ---
+    // Carica contatti
     async function caricaContatti() {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/contatti?select=*`, {
-        headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` }
-      });
-      const contatti = await res.json();
-      const c = document.getElementById("contatti-container");
-      c.innerHTML = "";
-      if (!contatti.length) {
-        c.innerHTML = "<p>Nessun contatto trovato.</p>";
-        return;
-      }
-      contatti.forEach(ct => {
-        c.innerHTML += `<p><strong>${ct.nome}</strong> — ${ct.email}</p>`;
+      const { data, error } = await supabaseClient.from('contatti').select('*');
+      if (error) { console.error(error); return; }
+      const container = document.getElementById('contatti-dati');
+      container.innerHTML = '';
+      data.forEach(c => {
+        container.innerHTML += `<p><strong>${c.nome}</strong> - ${c.email}</p>`;
       });
     }
 
-    // --- GESTIONE MENU ---
-    document.querySelectorAll("header button").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll("main section").forEach(sec => sec.classList.add("hidden"));
-        const target = btn.dataset.target;
-        document.getElementById(target).classList.remove("hidden");
-        if (target === "lezioni") caricaLezione();
-        if (target === "contatti") caricaContatti();
-      });
-    });
+    // Avvio
+    caricaLezioni();
   </script>
 </body>
 </html>

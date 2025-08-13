@@ -1,220 +1,241 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>App Lingua Russa - Menu</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Verdana, Arial, Helvetica, sans-serif;
-      background-color: #fff;
-      color: #333;
-    }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App Lingua Russa - Menu</title>
+  <style>
+    html, body {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      font-family: Verdana, Arial, Helvetica, sans-serif;
+      background-color: #fff;
+      color: #333;
+    }
 
-    /* Barra tricolore */
-    .flag-bar {
-      display: flex;
-      height: 10px;
-    }
-    .flag-bar div {
-      flex: 1;
-    }
-    .white { background-color: #FFFFFF; }
-    .blue { background-color: #0033A0; }
-    .red { background-color: #D52B1E; }
+    /* Barra tricolore */
+    .flag-bar {
+      display: flex;
+      height: 10px;
+    }
+    .flag-bar div {
+      flex: 1;
+    }
+    .white { background-color: #FFFFFF; }
+    .blue { background-color: #0033A0; }
+    .red { background-color: #D52B1E; }
 
-    header {
-      background-color: #0033A0; /* Blu bandiera russa */
-      color: #FFFFFF;
-      text-align: center;
-      padding: 20px;
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
+    header {
+      background-color: #0033A0; /* Blu bandiera russa */
+      color: #FFFFFF;
+      text-align: center;
+      padding: 20px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
 
-    .menu {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      margin: 20px 0;
-      flex-wrap: wrap;
-    }
+    .menu {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
 
-    .btn-primary {
-      width: 160px;
-      height: 33px;
-      background-color: #D52B1E;
-      color: #FFFFFF;
-      border: none;
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      transition: background-color 0.3s ease;
-    }
+    .btn-primary {
+      min-width: 120px;
+      height: 33px;
+      background-color: #D52B1E;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: background-color 0.3s ease;
+      flex: 1 1 auto;
+    }
 
-    .btn-primary:hover {
-      background-color: #a81f15;
-    }
+    .btn-primary:hover {
+      background-color: #a81f15;
+    }
 
-    main {
-      max-width: 800px;
-      margin: auto;
-      padding: 20px;
-      text-align: center;
-    }
-    
-    .card {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin: 10px 0;
-      text-align: left;
-      background: #f9f9f9;
-      border-radius: 8px;
-    }
+    main {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      text-align: center;
+      flex: 1;
+    }
 
-    footer {
-      background-color: #0033A0;
-      color: #FFFFFF;
-      text-align: center;
-      padding: 10px;
-      margin-top: 30px; /* Non più fissato in fondo, si adatta al contenuto */
-    }
-  </style>
+    .card {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px 0;
+      text-align: left;
+      background: #f9f9f9;
+      border-radius: 8px;
+    }
 
-  <!-- Importa il client di Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    /* Migliorie CSS aggiunte */
+    h3 {
+      color: #0033A0;
+      margin-top: 0;
+    }
+    h4 {
+      color: #D52B1E;
+      margin-bottom: 5px;
+    }
+    pre {
+      background: #eee;
+      padding: 10px;
+      border-radius: 5px;
+      white-space: pre-wrap;
+      font-family: Consolas, monospace;
+    }
 
-  <script>
-    // Configurazione Supabase
-    const SUPABASE_URL = "https://arytlfiqiwdyiykaklmb.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeXRsZmlxaXdkeWl5a2FrbG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMDEzMTksImV4cCI6MjA3MDU3NzMxOX0.kVWYz6a5hDNazon7LYGK1AF4tnLEp8h-EdFGH17GXL8";
+    footer {
+      background-color: #0033A0;
+      color: #FFFFFF;
+      text-align: center;
+      padding: 10px;
+      margin-top: 30px;
+    }
+  </style>
 
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  <!-- Importa il client di Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    // Funzione generica per caricare una sezione specifica
-    async function caricaSezione(tabella, ordine = null) {
-      const container = document.getElementById("content");
-      container.innerHTML = "<p>Caricamento...</p>";
+  <script>
+    // Configurazione Supabase
+    const SUPABASE_URL = "https://arytlfiqiwdyiykaklmb.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeXRsZmlxaXdkeWl5a2FrbG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMDEzMTksImV4cCI6MjA3MDU3NzMxOX0.kVWYz6a5hDNazon7LYGK1AF4tnLEp8h-EdFGH17GXL8";
 
-      let query = supabaseClient.from(tabella).select("*");
-      if (ordine) query = query.order(ordine, { ascending: true });
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-      const { data, error } = await query;
+    // Funzione generica per caricare una sezione specifica
+    async function caricaSezione(tabella, ordine = null) {
+      const container = document.getElementById("content");
+      container.innerHTML = "<p>Caricamento...</p>";
 
-      if (error) {
-        console.error("Errore nel caricamento:", error);
-        container.innerHTML = `<p style='color:red'>Errore nel caricamento: ${error.message}</p>`;
-        return;
-      }
+      let query = supabaseClient.from(tabella).select("*");
+      if (ordine) query = query.order(ordine, { ascending: true });
 
-      if (!data || data.length === 0) {
-        container.innerHTML = "<p>Nessun contenuto trovato.</p>";
-        return;
-      }
+      const { data, error } = await query;
 
-      container.innerHTML = "";
+      if (error) {
+        container.innerHTML = `<p style='color:red'>Errore nel caricamento: ${error.message}</p>`;
+        return;
+      }
 
-      data.forEach(item => {
-        const div = document.createElement("div");
-        div.classList.add("card");
+      if (!data || data.length === 0) {
+        container.innerHTML = "<p>Nessun contenuto trovato.</p>";
+        return;
+      }
 
-        // Titolo
-        if (item.titolo) div.innerHTML += `<h3>${item.titolo}</h3>`;
+      container.innerHTML = "";
 
-        // Descrizione
-        if (item.descrizione) div.innerHTML += `<p>${item.descrizione}</p>`;
+      data.forEach(item => {
+        const div = document.createElement("div");
+        div.classList.add("card");
 
-        // Dialogo
-        if (item.dialogo) {
-          div.innerHTML += `<h4>Dialogo</h4><pre>${item.dialogo}</pre>`;
-        }
-        
-        // Traduzione
-        if (item.traduzione) {
-          div.innerHTML += `<h4>Traduzione</h4><pre>${item.traduzione}</pre>`;
-        }
-        
-        // Vocabolario (se è un array JSON)
-        if (item.vocabolario) {
-          let voca = item.vocabolario;
-          if (typeof voca === "string") {
-            try {
-              voca = JSON.parse(voca);
-            } catch (e) {
-              voca = [];
-            }
-          }
-          if (Array.isArray(voca)) {
-            div.innerHTML += `<h4>Vocabolario</h4><ul>${voca.map(v => `<li>${v.parola} = ${v.traduzione}</li>`).join("")}</ul>`;
-          }
-        }
+        // Titolo
+        if (item.titolo) div.innerHTML += `<h3>${item.titolo}</h3>`;
 
-        // Grammatica
-        if (item.grammatica) {
-          div.innerHTML += `<h4>Grammatica</h4><p>${item.grammatica}</p>`;
-        }
+        // Descrizione
+        if (item.descrizione) div.innerHTML += `<p>${item.descrizione}</p>`;
 
-        // Esercizi
-        if (item.esercizi) {
-          let ex = item.esercizi;
-          if (typeof ex === "string") {
-            try {
-              ex = JSON.parse(ex);
-            } catch (e) {
-              ex = [];
-            }
-          }
-          if (Array.isArray(ex)) {
-            div.innerHTML += `<h4>Esercizi</h4><ul>${ex.map(e => `<li>${e.domanda} → ${e.risposta}</li>`).join("")}</ul>`;
-          }
-        }
+        // Dialogo
+        if (item.dialogo) {
+          div.innerHTML += `<h4>Dialogo</h4><pre>${item.dialogo}</pre>`;
+        }
+        
+        // Traduzione
+        if (item.traduzione) {
+          div.innerHTML += `<h4>Traduzione</h4><pre>${item.traduzione}</pre>`;
+        }
+        
+        // Vocabolario
+        if (item.vocabolario) {
+          let voca = item.vocabolario;
+          if (typeof voca === "string") {
+            try {
+              voca = JSON.parse(voca);
+            } catch (e) {
+              voca = [];
+            }
+          }
+          if (Array.isArray(voca)) {
+            div.innerHTML += `<h4>Vocabolario</h4><ul>${voca.map(v => `<li>${v.parola} = ${v.traduzione}</li>`).join("")}</ul>`;
+          }
+        }
 
-        container.appendChild(div);
-      });
-    }
+        // Grammatica
+        if (item.grammatica) {
+          div.innerHTML += `<h4>Grammatica</h4><p>${item.grammatica}</p>`;
+        }
 
-    // Funzione per mostrare la pagina Home
-    function mostraHome() {
-      document.getElementById("content").innerHTML = `
-        <h2>Benvenuto! 🇷🇺</h2>
-        <p>Questa è la tua app per imparare il russo.</p>
-        <p>Usa il menu qui sopra per navigare tra lezioni, vocabolario, grammatica ed esercizi.</p>
-      `;
-    }
+        // Esercizi
+        if (item.esercizi) {
+          let ex = item.esercizi;
+          if (typeof ex === "string") {
+            try {
+              ex = JSON.parse(ex);
+            } catch (e) {
+              ex = [];
+            }
+          }
+          if (Array.isArray(ex)) {
+            div.innerHTML += `<h4>Esercizi</h4><ul>${ex.map(e => `<li>${e.domanda} → ${e.risposta}</li>`).join("")}</ul>`;
+          }
+        }
 
-    // Mostra la Home all'avvio
-    document.addEventListener("DOMContentLoaded", mostraHome);
-  </script>
+        container.appendChild(div);
+      });
+    }
+
+    // Funzione per mostrare la pagina Home
+    function mostraHome() {
+      document.getElementById("content").innerHTML = `
+        <h2>Benvenuto! 🇷🇺</h2>
+        <p>Questa è la tua app per imparare il russo.</p>
+        <p>Usa il menu qui sopra per navigare tra lezioni, vocabolario, grammatica ed esercizi.</p>
+      `;
+    }
+
+    // Mostra la Home all'avvio
+    document.addEventListener("DOMContentLoaded", mostraHome);
+  </script>
 </head>
 <body>
 
-  <!-- Barra tricolore -->
-  <div class="flag-bar">
-    <div class="white"></div>
-    <div class="blue"></div>
-    <div class="red"></div>
-  </div>
+  <!-- Barra tricolore -->
+  <div class="flag-bar">
+    <div class="white"></div>
+    <div class="blue"></div>
+    <div class="red"></div>
+  </div>
 
-  <header>🇷🇺 App di Lingua Russa</header>
+  <header>🇷🇺 App di Lingua Russa</header>
 
-  <nav class="menu">
-    <button class="btn-primary" onclick="mostraHome()">🏠 Home</button>
-    <button class="btn-primary" onclick="caricaSezione('lezioni','titolo')">📚 Lezioni</button>
-    <button class="btn-primary" onclick="caricaSezione('vocabolario','parola')">🗣️ Vocabolario</button>
-    <button class="btn-primary" onclick="caricaSezione('grammatica','titolo')">📖 Grammatica</button>
-    <button class="btn-primary" onclick="caricaSezione('esercizi','domanda')">📝 Esercizi</button>
-    <button class="btn-primary" onclick="caricaSezione('contatti')">📩 Contatti</button>
-  </nav>
+  <nav class="menu">
+    <button class="btn-primary" onclick="mostraHome()">🏠 Home</button>
+    <button class="btn-primary" onclick="caricaSezione('lezioni','titolo')">📚 Lezioni</button>
+    <button class="btn-primary" onclick="caricaSezione('vocabolario','parola')">🗣️ Vocabolario</button>
+    <button class="btn-primary" onclick="caricaSezione('grammatica','titolo')">📖 Grammatica</button>
+    <button class="btn-primary" onclick="caricaSezione('esercizi','domanda')">📝 Esercizi</button>
+    <button class="btn-primary" onclick="caricaSezione('contatti')">📩 Contatti</button>
+  </nav>
 
-  <main id="content"></main>
+  <main id="content"></main>
 
-  <footer>© 2025 App Lingua Russa</footer>
+  <footer>© 2025 App Lingua Russa</footer>
 
 </body>
 </html>

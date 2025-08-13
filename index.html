@@ -11,7 +11,7 @@
 
   <script>
     const SUPABASE_URL = "https://arytlfiqiwdyiykaklmb.supabase.co";
-    const SUPABASE_ANON_KEY = "INSERISCI-LA-TUA-KEY-QUI"; // sostituisci con la tua chiave anon
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeXRsZmlxaXdkeWl5a2FrbG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMDEzMTksImV4cCI6MjA3MDU3NzMxOX0.kVWYz6a5hDNazon7LYGK1AF4tnLEp8h-EdFGH17GXL8"; // sostituisci con la tua chiave anon
 
     async function caricaLezione() {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/lezioni?select=*`, {

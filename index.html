@@ -18,7 +18,7 @@
 </head>
 <body class="bg-gray-50">
   <!-- HEADER -->
-  <header class="bg-blue-600 text-white p-4 flex justify-between items-center">
+  <header class="bg-gradient-to-r from-blue-600 via-white to-red-600 p-4 shadow-md">
     <h1 class="text-xl font-bold">Corso di Russo</h1>
     <nav>
       <button onclick="showHome()" class="lezione-btn">Home</button>
@@ -30,9 +30,12 @@
   <main class="p-4 max-w-3xl mx-auto">
     <!-- HOME -->
     <div id="home">
-      <h2 class="text-2xl font-bold mb-4">Benvenuto!</h2>
-      <p class="mb-4">Seleziona una lezione per iniziare:</p>
+     <h2 class="text-2xl font-bold mb-4">Seleziona una lezione</h2>
+               
+               
+                
       <div id="lezioni-buttons" class="flex flex-wrap"></div>
+    </div>
     </div>
 
     <!-- LEZIONE -->
@@ -68,7 +71,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = "https://arytlfiqiwdyiykaklmb.supabase.co";
-    const SUPABASE_KEY = "INSERISCI_CHIAVE_ANON";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeXRsZmlxaXdkeWl5a2FrbG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMDEzMTksImV4cCI6MjA3MDU3NzMxOX0.kVWYz6a5hDNazon7LYGK1AF4tnLEp8h-EdFGH17GXL8";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     function showHome() {
@@ -172,3 +175,11 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+

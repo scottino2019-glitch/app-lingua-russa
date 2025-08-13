@@ -4,55 +4,93 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lezione di Russo</title>
-  <!-- CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex justify-center p-6">
-  <div class="max-w-4xl w-full bg-white shadow-lg rounded-2xl p-8 space-y-8">
-    <header>
-      <h1 id="titolo" class="text-3xl font-bold text-center">Caricamento…</h1>
-      <p id="sottotitolo" class="text-lg text-center text-gray-600 mt-2"></p>
-    </header>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+  <!-- NAVBAR -->
+  <nav class="bg-white shadow-md">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex justify-between">
+        <div class="flex space-x-4">
+          <!-- Logo -->
+          <a href="#" class="flex items-center py-5 text-gray-700">
+            <span class="font-bold text-xl">Lingua Russa</span>
+          </a>
+          <!-- Primary nav -->
+          <div class="hidden md:flex items-center space-x-2">
+            <a href="#" class="py-5 px-3 text-gray-700 hover:text-blue-600">Home</a>
+            <a href="#" class="py-5 px-3 text-gray-700 hover:text-blue-600">Lezioni</a>
+            <a href="#" class="py-5 px-3 text-gray-700 hover:text-blue-600">Grammatica</a>
+            <a href="#" class="py-5 px-3 text-gray-700 hover:text-blue-600">Esercizi</a>
+            <a href="#" class="py-5 px-3 text-gray-700 hover:text-blue-600">Vocabolario</a>
+            <a href="#" class="py-5 px-3 text-gray-700 hover:text-blue-600">Contatti</a>
+          </div>
+        </div>
+        <!-- Mobile button -->
+        <div class="md:hidden flex items-center">
+          <button id="mobile-btn" class="mobile-menu-button">
+            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden">
+      <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-100">Home</a>
+      <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-100">Lezioni</a>
+      <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-100">Grammatica</a>
+      <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-100">Esercizi</a>
+      <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-100">Vocabolario</a>
+      <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-100">Contatti</a>
+    </div>
+  </nav>
 
-    <section>
-      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Dialogo</h2>
-      <div id="dialogo" class="space-y-2"></div>
-    </section>
+  <!-- CONTENUTO PAGINA -->
+  <main class="flex-grow flex justify-center p-6">
+    <div class="max-w-4xl w-full bg-white shadow-lg rounded-2xl p-8 space-y-8">
+      <header>
+        <h1 id="titolo" class="text-3xl font-bold text-center">Caricamento…</h1>
+        <p id="sottotitolo" class="text-lg text-center text-gray-600 mt-2"></p>
+      </header>
 
-    <section>
-      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Vocabolario</h2>
-      <div id="vocabolario" class="grid grid-cols-2 gap-4"></div>
-    </section>
+      <section>
+        <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Dialogo</h2>
+        <div id="dialogo" class="space-y-2"></div>
+      </section>
 
-    <section>
-      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Grammatica</h2>
-      <p id="grammatica" class="text-gray-800"></p>
-    </section>
+      <section>
+        <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Vocabolario</h2>
+        <div id="vocabolario" class="grid grid-cols-2 gap-4"></div>
+      </section>
 
-    <section>
-      <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Esercizi</h2>
-      <div id="esercizi" class="space-y-2"></div>
-    </section>
+      <section>
+        <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Grammatica</h2>
+        <p id="grammatica" class="text-gray-800"></p>
+      </section>
 
-    <div id="errore" class="hidden p-4 rounded bg-red-50 text-red-700"></div>
-  </div>
+      <section>
+        <h2 class="text-2xl font-semibold border-b pb-2 mb-4">Esercizi</h2>
+        <div id="esercizi" class="space-y-2"></div>
+      </section>
 
-  <!-- Supabase JS v2 (UMD) -->
+      <div id="errore" class="hidden p-4 rounded bg-red-50 text-red-700"></div>
+    </div>
+  </main>
+
+  <!-- Supabase + JS -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
-    // === CONFIG ===
     const SUPABASE_URL = "https://arytlfiqiwdyiykaklmb.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyeXRsZmlxaXdkeWl5a2FrbG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMDEzMTksImV4cCI6MjA3MDU3NzMxOX0.kVWYz6a5hDNazon7LYGK1AF4tnLEp8h-EdFGH17GXL8";
-
-    // IMPORTANTISSIMO: usa window.supabase e rinomina il client (sb)
+    const SUPABASE_ANON_KEY = "INSERISCI-LA-TUA-ANON-KEY";
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Utility: parse sicuro (nel caso i JSON fossero salvati come testo)
     function safeParse(val) {
       if (Array.isArray(val)) return val;
       try { return JSON.parse(val); } catch { return []; }
     }
-
     function mostraErrore(msg) {
       const box = document.getElementById("errore");
       box.textContent = msg;
@@ -79,42 +117,37 @@
           return;
         }
 
-        // Dati
-        const titolo = data.titolo || "";
-        const sottotitolo = data.sottotitolo || "";
+        document.getElementById("titolo").textContent = data.titolo || "";
+        document.getElementById("sottotitolo").textContent = data.sottotitolo || "";
+
         const dialogo = safeParse(data.dialogo);
-        const vocabolario = safeParse(data.vocabolario);
-        const esercizi = safeParse(data.esercizi);
-        const grammatica = data.grammatica || "";
-
-        // Render
-        document.getElementById("titolo").textContent = titolo;
-        document.getElementById("sottotitolo").textContent = sottotitolo;
-
-        const dialogoDiv = document.getElementById("dialogo");
-        dialogoDiv.innerHTML = dialogo.map(([speaker, frase]) =>
-          `<p><strong>${speaker}:</strong> ${frase}</p>`
+        document.getElementById("dialogo").innerHTML = dialogo.map(([spk, frase]) =>
+          `<p><strong>${spk}:</strong> ${frase}</p>`
         ).join("");
 
-        const vocaDiv = document.getElementById("vocabolario");
-        vocaDiv.innerHTML = vocabolario.map(([ru, it]) =>
+        const vocabolario = safeParse(data.vocabolario);
+        document.getElementById("vocabolario").innerHTML = vocabolario.map(([ru, it]) =>
           `<div class="p-2 border rounded">${ru}</div>
            <div class="p-2 border rounded bg-gray-50">${it}</div>`
         ).join("");
 
-        document.getElementById("grammatica").textContent = grammatica;
+        document.getElementById("grammatica").textContent = data.grammatica || "";
 
-        const exDiv = document.getElementById("esercizi");
-        exDiv.innerHTML = esercizi.map((ex, i) =>
-          `<p>${i + 1}. ${ex.domanda || ex.q || ""}</p>`
+        const esercizi = safeParse(data.esercizi);
+        document.getElementById("esercizi").innerHTML = esercizi.map((ex,i) =>
+          `<p>${i+1}. ${ex.domanda || ex.q || ""}</p>`
         ).join("");
 
       } catch (e) {
         mostraErrore("Eccezione JS: " + e.message);
       }
     }
+    caricaLezione();
 
-    caricaLezione(); // carica Lezione 1
+    // Mobile menu toggle
+    const btn = document.getElementById("mobile-btn");
+    const menu = document.getElementById("mobile-menu");
+    btn.addEventListener("click", () => menu.classList.toggle("hidden"));
   </script>
 </body>
 </html>
